@@ -4,7 +4,8 @@
 
 using namespace std;
 
-struct Contact {
+struct Contact
+{
   int id;
   string name;
   int country_code;
@@ -14,12 +15,18 @@ struct Contact {
 
 vector<Contact> contacts = {};
 
-void show_agenda() {
-  cout << "Agenda Telefônica" << endl << endl;
-  if (contacts.size() == 0) {
+void show_agenda()
+{
+  cout << "Agenda Telefônica" << endl
+       << endl;
+  if (contacts.size() == 0)
+  {
     cout << "Você não tem contatos na agenda" << endl;
-  } else {
-    for (Contact contact : contacts) {
+  }
+  else
+  {
+    for (Contact contact : contacts)
+    {
       cout << contact.id << ". " << contact.name << " - +"
            << contact.country_code << " (" << contact.area_code << ") "
            << contact.number << endl;
@@ -27,7 +34,32 @@ void show_agenda() {
   }
 }
 
-void add_contact() {
+void remove_contact()
+{
+  string name;
+
+  cout << "Informe o nome do contato que deseja remover: ";
+  cin >> name;
+
+  for (Contact contact : contacts)
+  {
+    if (contact.name == name)
+    {
+      string contact_name = contact.name;
+      auto it = find_if(contacts.begin(), contacts.end(), [&contact_name](const Contact &c)
+                        { return c.name == contact_name; });
+
+      if (it != contacts.end())
+      {
+        contacts.erase(it);
+        cout << "Contato de ID \"" << contact.id << "\", nome \"" << contact.name << "\". Foi removido com sucesso!" << endl;
+      }
+    }
+  }
+}
+
+void add_contact()
+{
   int id;
   string name;
   int country_code;
@@ -37,6 +69,15 @@ void add_contact() {
 
   cout << "Qual o nome do contato? ";
   cin >> name;
+
+  for (Contact contact : contacts)
+  {
+    if (contact.name == name)
+    {
+      cerr << "Já existe um contato com este nome! ID: " << contact.id << endl;
+      return;
+    }
+  }
 
   cout << "Qual o código do país? ";
   cin >> country_code;
@@ -52,19 +93,23 @@ void add_contact() {
   cout << "Deseja confirmar? (y/n) ";
   cin >> confirm;
 
-  if (confirm == "y") {
+  if (confirm == "y")
+  {
     int size = contacts.size();
-    contacts.resize(size + 1);
     contacts.push_back({size + 1, name, country_code, area_code, number});
-    cout << "Contato adicionado com sucesso, voltando ao menu!";
-  } else {
+    cout << "Contato adicionado com sucesso, voltando ao menu!" << endl;
+  }
+  else
+  {
     cout << "Ok, voltando ao menu!" << endl;
   }
 }
 
-void show_menu() {
-  cout << "Agenda Telefônica" << endl << endl;
-  cout << "O que você deseja fazer?" << endl;
+void show_menu()
+{
+  cout << endl
+       << endl
+       << "O que você deseja fazer?" << endl;
   cout << "1. Adicionar contato" << endl;
   cout << "2. Remover contato" << endl;
   cout << "3. Visualizar agenda" << endl;
@@ -72,22 +117,27 @@ void show_menu() {
   cout << "> ";
 }
 
-int main() {
+int main()
+{
   int action;
 
-  while (true) {
+  while (true)
+  {
     show_menu();
     cin >> action;
 
-    switch (action) {
+    switch (action)
+    {
     case 1:
       add_contact();
       break;
 
     case 2:
+      remove_contact();
       break;
 
     case 3:
+      show_agenda();
       break;
 
     case 4:
