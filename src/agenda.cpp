@@ -19,13 +19,13 @@ void show_agenda()
 {
   cout << "Agenda Telefônica" << endl
        << endl;
-  if (contacts.size() == 0)
+  if (contacts.empty())
   {
     cout << "Você não tem contatos na agenda" << endl;
   }
   else
   {
-    for (Contact contact : contacts)
+    for (const Contact &contact : contacts)
     {
       cout << contact.id << ". " << contact.name << " - +"
            << contact.country_code << " (" << contact.area_code << ") "
@@ -41,20 +41,13 @@ void remove_contact()
   cout << "Informe o nome do contato que deseja remover: ";
   cin >> name;
 
-  for (Contact contact : contacts)
-  {
-    if (contact.name == name)
-    {
-      string contact_name = contact.name;
-      auto it = find_if(contacts.begin(), contacts.end(), [&contact_name](const Contact &c)
-                        { return c.name == contact_name; });
+  auto it = find_if(contacts.begin(), contacts.end(), [&name](const Contact &c)
+                    { return c.name == name; });
 
-      if (it != contacts.end())
-      {
-        contacts.erase(it);
-        cout << "Contato de ID \"" << contact.id << "\", nome \"" << contact.name << "\". Foi removido com sucesso!" << endl;
-      }
-    }
+  if (it != contacts.end())
+  {
+    contacts.erase(it);
+    cout << "Contato de ID \"" << it.base()->id << "\", nome \"" << it.base()->name << "\". Foi removido com sucesso!" << endl;
   }
 }
 
