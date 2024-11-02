@@ -25,7 +25,7 @@ void show_agenda()
   }
   else
   {
-    for (const Contact &contact : contacts)
+    for (const auto &contact : contacts)
     {
       cout << contact.id << ". " << contact.name << " - +"
            << contact.country_code << " (" << contact.area_code << ") "
@@ -37,7 +37,6 @@ void show_agenda()
 void remove_contact()
 {
   string name;
-
   cout << "Informe o nome do contato que deseja remover: ";
   cin >> name;
 
@@ -47,29 +46,31 @@ void remove_contact()
   if (it != contacts.end())
   {
     contacts.erase(it);
-    cout << "Contato de ID \"" << it.base()->id << "\", nome \"" << it.base()->name << "\". Foi removido com sucesso!" << endl;
+    cout << "Contato de ID \"" << it->id << "\", nome \"" << it->name << "\" foi removido com sucesso!" << endl;
+  }
+  else
+  {
+    cout << "Contato não encontrado." << endl;
   }
 }
 
 void add_contact()
 {
-  int id;
   string name;
-  int country_code;
-  int area_code;
+  int country_code, area_code;
   long number;
   string confirm;
 
   cout << "Qual o nome do contato? ";
   cin >> name;
 
-  for (Contact contact : contacts)
+  auto it = find_if(contacts.begin(), contacts.end(), [&name](const Contact &c)
+                    { return c.name == name; });
+
+  if (it != contacts.end())
   {
-    if (contact.name == name)
-    {
-      cerr << "Já existe um contato com este nome! ID: " << contact.id << endl;
-      return;
-    }
+    cerr << "Já existe um contato com este nome! ID: " << it->id << endl;
+    return;
   }
 
   cout << "Qual o código do país? ";
@@ -81,8 +82,7 @@ void add_contact()
   cout << "Qual o número do telefone? ";
   cin >> number;
 
-  cout << "Preview: " << name << " - +" << country_code << " (" << area_code
-       << ") " << number << endl;
+  cout << "Preview: " << name << " - +" << country_code << " (" << area_code << ") " << number << endl;
   cout << "Deseja confirmar? (y/n) ";
   cin >> confirm;
 
@@ -119,6 +119,13 @@ int main()
     show_menu();
     cin >> action;
 
+    if (cin.fail())
+    {
+      cin.clear();
+      cout << "Entrada inválida. Por favor, tente novamente." << endl;
+      continue;
+    }
+
     switch (action)
     {
     case 1:
@@ -138,8 +145,7 @@ int main()
       return 0;
 
     default:
-      cout << "Não identifiquei o que você deseja fazer. Tente novamente!"
-           << endl;
+      cout << "Não identifiquei o que você deseja fazer. Tente novamente!" << endl;
     }
   }
 
