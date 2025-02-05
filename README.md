@@ -11,6 +11,14 @@ This repository contains all of my C++ and C code that I haven't transformed int
 2. [fact.cpp](./src/fact.cpp): A simple CLI to calculate the factorial of a provided number. I managed to learn `recursion` with this project.
 3. [agenda.cpp](./src/agenda.cpp): A simple contact agenda that I made to learn how to use `vectors` and `structs` in C++.
 
+## Installation
+
+```shell
+cmake . -B build/
+cmake --build build/
+cmake --install build/ --prefix .
+```
+
 ## License
 
 This project is licensed under the [MIT License](./LICENSE).
